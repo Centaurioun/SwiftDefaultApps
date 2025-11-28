@@ -37,7 +37,7 @@ class SetCommand: OptionCommand {
 class SetCommand: Command {
     @Flag("--internet", description: "...")
     var internet: Bool
-    
+
     func execute() throws {
         if internet { ... }
     }
@@ -76,6 +76,14 @@ We removed `DummyApp` from the `dependencies` list of `SWDA-CLI` and `SWDA-Prefp
 We moved the specific code that caused the loop out of `SWDA-Common` and into the Prefpane source files where it belongs:
 -   Moved `extension NSControl` (UI code) to `Subclasses.swift`.
 -   Moved `extension LSRolesMask` (UI data mapping) to `SWDAHandlersModel.swift`.
+
+## 6. Cleanup of Legacy Artifacts
+
+### The Problem
+The repository contained a `Packages/` folder with an old copy of `SwiftCLI-2.0.3`. This was likely a leftover from an older package management strategy (vendoring dependencies).
+
+### The Fix
+We deleted the `Packages/` folder. The project now relies entirely on Swift Package Manager to fetch the correct version of `SwiftCLI` (from your fork) into the `.build/` directory. This keeps the repository clean and ensures we are using the version specified in `Package.swift`.
 
 ## How to Build and Run
 
