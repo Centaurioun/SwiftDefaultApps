@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 
 /** Represents information about an application and its associated URI Schemes and UTIs as an object. */

@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 /** Utilitary Singleton containing references to the proper instances of View controllers, tabs, taba data and so on. */
 final internal class ControllersRef: NSObject {

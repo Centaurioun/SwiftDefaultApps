@@ -8,7 +8,7 @@ let package = Package(
 		.executable(name: "CLI", targets: ["SWDA-CLI"])
 	],
 	dependencies: [
-		.package(url: "https://github.com/Lord-Kamina/SwiftCLI", from: Version("2.0.3+swift5"))
+		.package(url: "https://github.com/Centaurioun/SwiftCLI", .branch("master"))
 	],
 	targets: [
 		.target(
@@ -23,13 +23,13 @@ let package = Package(
 		),
 		.target(
 			name: "SWDA-CLI",
-			dependencies: ["SwiftCLI", "SWDA-Common", "DummyApp"],
+			dependencies: ["SwiftCLI", "SWDA-Common"],
 			path: "Sources",
 			sources: ["CLI Components/"]
 		),
 		.target(
 			name: "SWDA-Prefpane",
-			dependencies: ["SWDA-Common", "DummyApp"],
+			dependencies: ["SWDA-Common"],
 			path: "Sources",
 			sources: ["Prefpane Sources/"]
 		)

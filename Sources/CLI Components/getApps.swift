@@ -9,19 +9,19 @@
 
 import Foundation
 import SwiftCLI
+import SWDA_Common
 
 
 class GetApps: Command {
-	
+
 	let name = "getApps"
-	let signature = ""
 	let shortDescription = "Returns a list of all registered applications."
-	
-	func execute(arguments: CommandArguments) throws  {
-		
+
+	func execute() throws  {
+
 		if let output = copyStringArrayAsString(LSWrappers.copyAllApps()) {
 			print(output)
 		}
-		else { throw CLIError.error("SwiftDefaultApps ERROR: Couldn't generate the list of installed applications.") }
+		else { throw CLI.Error(message: "SwiftDefaultApps ERROR: Couldn't generate the list of installed applications.") }
 	}
 }

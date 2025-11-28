@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 /** Represent an instance of a kind of Content (UTI/URL) and a valid associated application in a given role. */
 class SWDAContentHandler: NSObject {

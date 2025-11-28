@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Debug Prefpane",
+            "target": "Prefpane",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug Prefpane"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Release Prefpane",
+            "target": "Prefpane",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release Prefpane"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Debug CLI",
+            "target": "CLI",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug CLI"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Release CLI",
+            "target": "CLI",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release CLI"
+        }
+    ]
+}

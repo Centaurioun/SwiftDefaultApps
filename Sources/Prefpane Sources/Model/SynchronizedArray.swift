@@ -9,6 +9,8 @@
 //
 
 import Foundation
+import SWDA_Common
+import SWDA_Common
 
 /// A thread-safe array.
 public class SynchronizedArray<Element> {

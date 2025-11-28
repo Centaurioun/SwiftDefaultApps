@@ -8,6 +8,8 @@
 */
 
 import Foundation
+import SWDA_Common
+import SWDA_Common
 
 /** Represent LSRolesMask in a more convenient format for us. */
 enum SourceListRoleTypes:String {
@@ -117,6 +119,20 @@ class SWDAHandlersModel: NSObject {
 				window?.endSheet(progressAlert.window)
 				completionHandler()
 			}
+		}
+	}
+}
+
+extension LSRolesMask {
+	/**
+	Bridge our custom type to the actual values used in LaunchServices methods.
+	*/
+	init (from value: SourceListRoleTypes) {
+		switch value {
+		case .Viewer: self = .viewer
+		case .Editor: self = .editor
+		case .Shell: self = .shell
+		case .All: self = .all
 		}
 	}
 }

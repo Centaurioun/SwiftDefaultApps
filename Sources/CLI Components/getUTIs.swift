@@ -9,19 +9,19 @@
 
 import Foundation
 import SwiftCLI
+import SWDA_Common
 
 class GetUTIs: Command {
-	
+
 	let name = "getUTIs"
-	let signature = ""
 	let shortDescription = "Returns a list of all known UTIs, and their default handler."
-	
-	func execute(arguments: CommandArguments) throws  {
-		
+
+	func execute() throws  {
+
 		if let output = copyDictionaryAsString(LSWrappers.UTType.copyAllUTIs().sorted(by: { $0.0 < $1.0 })) {
 			print(output)
 		}
-		else { throw CLIError.error("SwiftDefaultApps ERROR: Couldn't generate list of UTIs") }
+		else { throw CLI.Error(message: "SwiftDefaultApps ERROR: Couldn't generate list of UTIs") }
 	}
-	
+
 }

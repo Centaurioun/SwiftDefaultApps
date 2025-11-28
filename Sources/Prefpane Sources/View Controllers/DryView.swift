@@ -16,6 +16,7 @@
 
 
 import Cocoa
+import SWDA_Common
 
 @IBDesignable class DRYView: NSView {
 	private let dRYViewKVOContext = UnsafeMutableRawPointer(bitPattern: 1)

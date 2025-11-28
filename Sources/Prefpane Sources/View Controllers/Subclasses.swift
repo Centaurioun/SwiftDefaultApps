@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 extension DRYView {
 	/** Bridge required to make currentTab really dependent on the selectedTabViewItemIndex */
@@ -313,5 +314,40 @@ class HyperlinkTextField: NSTextField {
 		else { self.stringValue = url }
 		self.href = url
 		self.awakeFromNib()
+	}
+}
+
+extension NSControl {
+	/** Shrinks a text label until it fits in a single line in its container. */
+	public func fitWidth() {
+		var absoluteMaxWidth: CGFloat = 0.0
+		if let tempWidth = (self.superview?.frame.width) {
+			absoluteMaxWidth = tempWidth
+			absoluteMaxWidth -= (self.alignmentRectInsets.left + self.alignmentRectInsets.right)
+		}
+		
+		let text = self.stringValue
+		guard self.font != nil else { return }
+		var font = self.font!
+		
+		if ControllersRef.sharedInstance.originalFonts[self] == nil {
+			ControllersRef.sharedInstance.originalFonts[self] = font
+		}
+		else { font = ControllersRef.sharedInstance.originalFonts[self]! }
+		
+		let richText = NSTextFieldCell(textCell:text)
+		richText.font = font
+		var neededWidth: CGFloat = richText.cellSize.width
+		var fontSize = font.pointSize
+		var newFont = font
+		guard absoluteMaxWidth > 0.0 else { return }
+		while (neededWidth >= absoluteMaxWidth) {
+			guard fontSize > 0.0 else { return }
+			fontSize -= 0.5
+			newFont = NSFont(descriptor:font.fontDescriptor, size: fontSize)!
+			richText.font = newFont
+			neededWidth = richText.cellSize.width
+		}
+		self.setValue(newFont, forKey:"font")
 	}
 }

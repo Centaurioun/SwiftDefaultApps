@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 /** Create a progressbar and display it on a modal sheet while the Content Array is populated asynchronously. */
 class ProgressAlert: NSAlert {

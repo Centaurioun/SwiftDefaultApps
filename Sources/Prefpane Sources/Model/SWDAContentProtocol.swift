@@ -8,6 +8,7 @@
 */
 
 import AppKit
+import SWDA_Common
 
 /** Abstract protocol adopted by SWDAContentItem and SWDAApplicationItem, which define the appropriate classes to populate the NSTableView with. */
 internal protocol SWDAContentProtocol: NSObject {

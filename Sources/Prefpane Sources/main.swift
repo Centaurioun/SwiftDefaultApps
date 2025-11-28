@@ -8,6 +8,7 @@
  */
 
 import PreferencePanes
+import SWDA_Common
 
 /** Main PreferencePane class */
 

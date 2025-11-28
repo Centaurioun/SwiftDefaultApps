@@ -9,7 +9,9 @@
 
 import Foundation
 import SwiftCLI
-CLI.setup(name:"swda", version:"1.0", description:"Utility to retrieve and manipulate default applications in macOS.")
-CLI.register(commands: [ ReadCommand(), GetApps(), GetSchemes(), GetUTIs(), SetCommand() ])
+import SWDA_Common
 
-exit(CLI.go())
+let cli = CLI(name: "swda", version: "1.0", description: "Utility to retrieve and manipulate default applications in macOS.")
+cli.commands = [ ReadCommand(), GetApps(), GetSchemes(), GetUTIs(), SetCommand() ]
+
+cli.goAndExit()

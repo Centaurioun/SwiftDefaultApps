@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "SwiftCLI",
+        "repositoryURL": "https://github.com/Centaurioun/SwiftCLI",
+        "state": {
+          "branch": "master",
+          "revision": "2e949055d9797c1a6bddcda0e58dada16cc8e970",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

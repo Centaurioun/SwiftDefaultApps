@@ -9,82 +9,93 @@
 
 import Foundation
 import SwiftCLI
+import SWDA_Common
 
-class SetCommand: OptionCommand {
-	var failOnUnrecognizedOptions = true
+class SetCommand: Command {
+
 	let name = "setHandler"
-	let signature = ""
 	let shortDescription = "Sets <application> as the default handler for a given <type>/<subtype> combination."
-	private var kind: String = ""
-	private var contentType: String? = nil
-	private var inApplication: String = "None"
-	private var bundleID: String? = nil
-	private var statusCode: OSStatus = kLSUnknownErr
-	private var roles: Dictionary = ["editor":LSRolesMask.editor,"viewer":LSRolesMask.viewer,"shell":LSRolesMask.shell,"all":LSRolesMask.all]
-	private var role: LSRolesMask = LSRolesMask.all
-	
-	func setupOptions(options: OptionRegistry) {
-		options.addGroup(name:"type", required:true, conflicting:true)
-		options.addGroup(name:"application", required:true, conflicting:true)
-		options.add(keys: ["--UTI"], usage: "Change the default application for <subtype>", valueSignature: "subtype", group:"type") { [unowned self] (value) in
-			self.contentType = value
-			self.kind = "UTI"
-		}
-		options.add(keys: ["--URL"], usage: "Change the default application for <subtype>", valueSignature: "subtype", group:"type") { [unowned self] (value) in
-			self.contentType = value
-			self.kind = "URL"
-		}
-		
-		options.add(flags: ["--internet", "--browser", "--web"], usage: "Changes the default web browser.", group:"type") {
-			self.contentType = nil
-			self.kind = "http"
-		}
-		options.add(flags: ["--mail", "--email", "--e-mail"], usage: "Changes the default e-mail client.", group:"type") {
-			self.contentType = nil
-			self.kind = "mailto"
-		}
-		options.add(flags: ["--ftp"], usage: "Changes the default FTP client.", group:"type") {
-			self.contentType = nil
-			self.kind = "ftp"
-		}
-		options.add(flags: ["--rss"], usage: "Changes the default RSS client.", group:"type") {
-			self.contentType = nil
-			self.kind = "RSS"
-		}
-		options.add(flags: ["--news"], usage: "Changes the default news client.", group:"type") {
-			self.contentType = nil
-			self.kind = "news"
-		}
-		options.add(keys: ["--app", "--application"], usage: "The <application> to register as default handler. Specifying \"None\" will remove the currently registered handler.", valueSignature: "application", group:"application") { [unowned self] (value) in
-			self.inApplication = value
-		}
-		options.add(keys: ["--role"], usage: "--role <Viewer|Editor|Shell|All>, specifies the role with which to register the handler. Default is All.", valueSignature: "role") { [unowned self] (value) in
-			if let temp = self.roles[value.lowercased()] {
-				self.role = temp
-			}
-			else { self.role = LSRolesMask.all }
-		}
-	}
-	
-	func execute(arguments: CommandArguments) throws  {
-		statusCode = LSWrappers.getBundleID(self.inApplication, outBundleID: &bundleID)
-		guard (statusCode == 0) else { throw CLIError.error(LSWrappers.LSErrors.init(value: statusCode).print(argument: (app: inApplication, content: self.contentType ?? self.kind))) }
-		switch(kind) {
-		case "UTI","URL":
-			if let contentString = self.contentType {
-				statusCode = ((kind == "URL") ? LSWrappers.Schemes.setDefaultHandler(contentString, bundleID!) : LSWrappers.UTType.setDefaultHandler(contentString, bundleID!, self.role))
-			}
-			break
-		case "http","mailto","ftp","rss","news":
-			statusCode = LSWrappers.Schemes.setDefaultHandler(kind, bundleID!)
-			break
-			
-		default:
-			statusCode = kLSUnknownErr
-			break
-		}
-		do {
-			try displayAlert(error: statusCode, arg1: (bundleID != nil ? bundleID : inApplication), arg2: self.contentType ?? self.kind)
-		} catch { print(error) }
+
+    @Key("-u", "--UTI", description: "Change the default application for <subtype>")
+    var uti: String?
+
+    @Key("-U", "--URL", description: "Change the default application for <subtype>")
+    var url: String?
+
+    @Flag("--internet", "--browser", "--web", description: "Changes the default web browser.")
+    var internet: Bool
+
+    @Flag("--mail", "--email", "--e-mail", description: "Changes the default e-mail client.")
+    var mail: Bool
+
+    @Flag("--ftp", description: "Changes the default FTP client.")
+    var ftp: Bool
+
+    @Flag("--rss", description: "Changes the default RSS client.")
+    var rss: Bool
+
+    @Flag("--news", description: "Changes the default news client.")
+    var news: Bool
+
+    @Key("--app", "--application", description: "The <application> to register as default handler. Specifying \"None\" will remove the currently registered handler.")
+    var application: String?
+
+    @Key("--role", description: "--role <Viewer|Editor|Shell|All>, specifies the role with which to register the handler. Default is All.")
+    var roleString: String?
+
+    var optionGroups: [OptionGroup] {
+        return [
+            OptionGroup(options: [$uti, $url, $internet, $mail, $ftp, $rss, $news], restriction: .exactlyOne)
+        ]
+    }
+
+	func execute() throws  {
+        var kind = ""
+        var contentType: String? = nil
+
+        if let val = uti { kind = "UTI"; contentType = val }
+        else if let val = url { kind = "URL"; contentType = val }
+        else if internet { kind = "http" }
+        else if mail { kind = "mailto" }
+        else if ftp { kind = "ftp" }
+        else if rss { kind = "RSS" }
+        else if news { kind = "news" }
+
+        guard let inApplication = application else {
+             throw CLI.Error(message: "Missing required argument: --application")
+        }
+
+        var role: LSRolesMask = LSRolesMask.all
+        if let r = roleString {
+             let rolesDict = ["editor":LSRolesMask.editor,"viewer":LSRolesMask.viewer,"shell":LSRolesMask.shell,"all":LSRolesMask.all]
+             if let temp = rolesDict[r.lowercased()] {
+                 role = temp
+             } else {
+                 role = LSRolesMask.all
+             }
+        }
+
+        var bundleID: String? = nil
+        var statusCode: OSStatus = kLSUnknownErr
+
+        statusCode = LSWrappers.getBundleID(inApplication, outBundleID: &bundleID)
+        guard (statusCode == 0) else {
+             throw CLI.Error(message: LSWrappers.LSErrors.init(value: statusCode).print(argument: (app: inApplication, content: contentType ?? kind)))
+        }
+
+        switch(kind) {
+        case "UTI","URL":
+            if let contentString = contentType {
+                statusCode = ((kind == "URL") ? LSWrappers.Schemes.setDefaultHandler(contentString, bundleID!) : LSWrappers.UTType.setDefaultHandler(contentString, bundleID!, role))
+            }
+        case "http","mailto","ftp","rss","news":
+            statusCode = LSWrappers.Schemes.setDefaultHandler(kind, bundleID!)
+        default:
+            statusCode = kLSUnknownErr
+        }
+
+        do {
+            try displayAlert(error: statusCode, arg1: (bundleID != nil ? bundleID : inApplication), arg2: contentType ?? kind)
+        } catch { print(error) }
 	}
 }
