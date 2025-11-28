@@ -39,6 +39,46 @@
             "target": "CLI",
             "configuration": "release",
             "preLaunchTask": "swift: Build Release CLI"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Debug swda",
+            "target": "swda",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug swda"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Release swda",
+            "target": "swda",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release swda"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Debug DummyApp",
+            "target": "DummyApp",
+            "configuration": "debug",
+            "preLaunchTask": "swift: Build Debug DummyApp"
+        },
+        {
+            "type": "swift",
+            "request": "launch",
+            "args": [],
+            "cwd": "${workspaceFolder:SwiftDefaultApps}",
+            "name": "Release DummyApp",
+            "target": "DummyApp",
+            "configuration": "release",
+            "preLaunchTask": "swift: Build Release DummyApp"
         }
     ]
 }

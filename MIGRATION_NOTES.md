@@ -96,3 +96,17 @@ To run the CLI from the terminal:
 ```bash
 .build/debug/CLI --help
 ```
+
+## 7. Full Project Modernization (SPM & Build Script)
+
+### The Problem
+The project relied on legacy `.xcodeproj` files that were broken and referenced deleted files. The folder structure was non-standard, and there was no easy way to build the final `.prefpane` bundle from the command line.
+
+### The Fix
+1.  **Removed Legacy Files**: Deleted all `.xcodeproj` and `.xcworkspace` files.
+2.  **Restructured Folders**: Moved source code into standard SPM directories (`Sources/SWDA-CLI`, `Sources/SWDA-Prefpane`, etc.).
+3.  **Updated Configuration**: Rewrote `Package.swift` to support resources and define correct targets (Library for Prefpane, Executable for CLI).
+4.  **Created Build Script**: Added `build.sh` to automate the entire build process, including compiling XIBs/Assets and packaging the `.prefpane` and `.app` bundles.
+
+### New Build Process
+Simply run `./build.sh` to build everything. The output will be in the `Build/` folder.
